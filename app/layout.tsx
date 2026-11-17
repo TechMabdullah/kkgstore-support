@@ -46,7 +46,29 @@ export default function RootLayout({
           id="unicorn-studio"
           strategy="lazyOnload"
           dangerouslySetInnerHTML={{
-            __html: `!function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init({ dpi: 1, scale: 0.4, fps: 20 }),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();`,
+            __html: `!function(){
+      console.log("[Unicorn] Script tag executed");
+      if(!window.UnicornStudio){
+        window.UnicornStudio={isInitialized:!1};
+        var i=document.createElement("script");
+        i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
+        i.onload=function(){
+          console.log("[Unicorn] CDN reachable & script loaded!");
+          var el = document.querySelector('[data-us-project]');
+          console.log("[Unicorn] Target div:", el, "Size:", el?.getBoundingClientRect());
+          if(!window.UnicornStudio.isInitialized){
+            UnicornStudio.init({ dpi: 1, scale: 0.4, fps: 20 })
+              .then(function(scenes){ console.log("[Unicorn] Init success:", scenes); })
+              .catch(function(err){ console.error("[Unicorn] Init error:", err); });
+            window.UnicornStudio.isInitialized=!0;
+          }
+        };
+        i.onerror=function(e){
+          console.error("[Unicorn] Failed to reach jsDelivr CDN:", e);
+        };
+        (document.head || document.body).appendChild(i);
+      }
+    }();`,
           }}
         />
       </body>

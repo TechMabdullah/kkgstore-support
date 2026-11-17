@@ -15,7 +15,7 @@ const Navbar = () => {
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm font-light text-zinc-400">
           <Link
-            href="#Features"
+            href="#features"
             className="hover:text-white transititon-colors"
           >
             Features
